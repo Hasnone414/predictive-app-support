@@ -1,0 +1,397 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Predictive App Support Dashboard</title>
+<style>
+:root {
+  --bg: #070b16;
+  --panel: #10182a;
+  --border: #233452;
+  --cyan: #35e7ff;
+  --purple: #a78bfa;
+  --green: #35e69b;
+  --red: #ff647c;
+  --text: #eaf2ff;
+  --muted: #8b9bb7;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: radial-gradient(ellipse at top, #132346 0%, var(--bg) 58%);
+  color: var(--text);
+  font-family: Arial, Helvetica, sans-serif;
+  min-height: 100vh;
+}
+header {
+  padding: 24px 5%;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.brand { font-size: 21px; font-weight: bold; letter-spacing: .5px; }
+.brand span { color: var(--cyan); }
+.status {
+  color: var(--green);
+  border: 1px solid #235e50;
+  background: #0c2828;
+  padding: 9px 13px;
+  border-radius: 20px;
+  font-size: 12px;
+}
+main { max-width: 1250px; margin: auto; padding: 32px 5%; }
+.eyebrow {
+  color: var(--cyan);
+  text-transform: uppercase;
+  font-size: 11px;
+  letter-spacing: 3px;
+}
+h1 { font-size: clamp(28px, 4vw, 43px); margin: 12px 0; }
+.subtitle { color: var(--muted); line-height: 1.7; max-width: 720px; }
+.metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(205px, 1fr));
+  gap: 16px;
+  margin: 30px 0;
+}
+.card, .panel {
+  background: linear-gradient(145deg, #111d33, #0b1221);
+  border: 1px solid var(--border);
+  border-radius: 15px;
+  padding: 22px;
+  box-shadow: 0 0 24px #02061255;
+}
+.card { border-top: 2px solid var(--cyan); }
+.card:nth-child(2) { border-top-color: var(--purple); }
+.card:nth-child(3) { border-top-color: var(--green); }
+.card:nth-child(4) { border-top-color: #ffb454; }
+.metric-label { color: var(--muted); font-size: 13px; }
+.metric-value { font-size: 32px; font-weight: bold; margin: 17px 0 8px; }
+.metric-foot { font-size: 12px; color: var(--green); }
+.section-grid {
+  display: grid;
+  grid-template-columns: 1.2fr .8fr;
+  gap: 18px;
+}
+h2 { font-size: 17px; margin-top: 0; }
+.panel p { color: var(--muted); font-size: 13px; line-height: 1.6; }
+.bar-row { margin: 23px 0; }
+.bar-label { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 9px; }
+.track { height: 8px; background: #202d46; border-radius: 10px; overflow: hidden; }
+.bar { height: 100%; width: 0; border-radius: 10px; transition: width .5s; }
+.cyan { background: var(--cyan); box-shadow: 0 0 12px var(--cyan); }
+.purple { background: var(--purple); box-shadow: 0 0 12px var(--purple); }
+.green { background: var(--green); box-shadow: 0 0 12px var(--green); }
+.activity {
+  border-left: 2px solid var(--cyan);
+  padding: 2px 0 15px 15px;
+  margin: 20px 0;
+}
+.activity strong { font-size: 13px; }
+.activity small { display: block; color: var(--muted); margin-top: 7px; line-height: 1.5; }
+.alert {
+  display: none;
+  border: 1px solid var(--red);
+  color: #ffdce2;
+  background: #351521;
+  border-radius: 10px;
+  padding: 14px;
+  margin: 18px 0;
+  line-height: 1.5;
+  font-size: 13px;
+}
+.actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 25px; }
+button {
+  cursor: pointer;
+  padding: 12px 17px;
+  border-radius: 9px;
+  border: 1px solid var(--cyan);
+  color: var(--cyan);
+  background: #102536;
+  font-weight: bold;
+}
+button:hover { box-shadow: 0 0 18px #35e7ff44; transform: translateY(-1px); }
+button.primary { background: var(--cyan); color: #06101c; }
+button.danger { border-color: var(--red); color: var(--red); background: #291521; }
+.notice {
+  display: none;
+  padding: 12px;
+  border-radius: 9px;
+  margin-top: 14px;
+  border: 1px solid var(--green);
+  color: var(--green);
+  font-size: 13px;
+}
+footer {
+  text-align: center;
+  padding: 25px;
+  color: var(--muted);
+  font-size: 11px;
+  border-top: 1px solid var(--border);
+  margin-top: 35px;
+}
+@media(max-width: 700px) {
+  .section-grid { grid-template-columns: 1fr; }
+  header { padding: 20px; }
+  main { padding: 25px 18px; }
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand"><span>◈</span> PREDICTIVE SUPPORT</div>
+  <div class="status" id="systemStatus">● ALL SYSTEMS OPERATIONAL</div>
+</header>
+
+<main>
+  <div class="eyebrow">Application Intelligence Platform</div>
+  <h1>From Reactive to <span style="color:var(--cyan)">Proactive</span></h1>
+  <p class="subtitle">
+    Monitor application health, identify unusual behavior, and demonstrate
+    how predictive support can help teams respond before problems escalate.
+  </p>
+
+  <div class="alert" id="alertBox">
+    <strong>⚠ ANOMALY DETECTED</strong><br>
+    Unusual latency and error activity detected. Investigate the incident
+    and notify users if required. Demo simulation only.
+  </div>
+
+  <section class="metrics">
+    <div class="card">
+      <div class="metric-label">Application Success Rate</div>
+      <div class="metric-value" id="success">99.8%</div>
+      <div class="metric-foot" id="successFoot">↑ Healthy performance</div>
+    </div>
+    <div class="card">
+      <div class="metric-label">Average Response Time</div>
+      <div class="metric-value" id="latency">180 ms</div>
+      <div class="metric-foot" id="latencyFoot">Within target</div>
+    </div>
+    <div class="card">
+      <div class="metric-label">Error Rate</div>
+      <div class="metric-value" id="errors">0.2%</div>
+      <div class="metric-foot" id="errorFoot">Normal range</div>
+    </div>
+    <div class="card">
+      <div class="metric-label">Support Tickets</div>
+      <div class="metric-value" id="tickets">12</div>
+      <div class="metric-foot" id="ticketFoot">Illustrative open tickets</div>
+    </div>
+  </section>
+
+  <div class="section-grid">
+    <section class="panel">
+      <h2>System Health Monitor</h2>
+      <p>Illustrative indicators of current application performance.</p>
+
+      <div class="bar-row">
+        <div class="bar-label"><span>Availability</span><span id="availabilityText">99.8%</span></div>
+        <div class="track"><div class="bar cyan" id="availabilityBar"></div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label"><span>Performance score</span><span id="performanceText">92%</span></div>
+        <div class="track"><div class="bar purple" id="performanceBar"></div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label"><span>Service health</span><span id="healthText">98%</span></div>
+        <div class="track"><div class="bar green" id="healthBar"></div></div>
+      </div>
+
+      <div class="actions">
+        <button class="danger" onclick="simulateAnomaly()">⚡ Simulate Anomaly</button>
+        <button class="primary" onclick="resolveIncident()">✓ Resolve Incident</button>
+        <button onclick="resetDemo()">Reset Demo</button>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Predictive Activity Feed</h2>
+      <p>Example events that a support team might monitor.</p>
+      <div id="activityFeed">
+        <div class="activity">
+          <strong style="color:var(--green)">✓ Health check passed</strong>
+          <small>Application services are responding normally.</small>
+        </div>
+        <div class="activity">
+          <strong style="color:var(--cyan)">◈ Monitoring active</strong>
+          <small>Watching response time, availability, and error patterns.</small>
+        </div>
+        <div class="activity">
+          <strong style="color:var(--purple)">✦ Predictive analysis ready</strong>
+          <small>Demo is ready to simulate a potential incident.</small>
+        </div>
+      </div>
+      <button onclick="publishNotice()">Publish User Notice</button>
+      <div class="notice" id="noticeBox">
+        User notice simulated. No real notification has been sent.
+      </div>
+    </section>
+  </div>
+
+  <p style="font-size:11px;color:var(--muted);margin-top:24px;line-height:1.7">
+    DEMO DISCLAIMER: All metrics and events are simulated for presentation
+    purposes. This dashboard is not connected to a real application,
+    monitoring service, or ticketing system. Any improvement percentages
+    should be treated as targets until validated against real data.
+  </p>
+</main>
+
+<footer>
+  PREDICTIVE APP SUPPORT · INTERACTIVE DEMONSTRATION · NOT LIVE PRODUCTION DATA
+</footer>
+
+<script>
+let incidentActive = false;
+let eventCount = 0;
+
+function setBar(id, value) {
+  document.getElementById(id).style.width = value + "%";
+}
+
+function addActivity(title, description, color) {
+  const feed = document.getElementById("activityFeed");
+  const item = document.createElement("div");
+  item.className = "activity";
+
+  const strong = document.createElement("strong");
+  strong.style.color = color;
+  strong.textContent = title;
+
+  const small = document.createElement("small");
+  small.textContent = description;
+
+  item.appendChild(strong);
+  item.appendChild(small);
+  feed.prepend(item);
+
+  while (feed.children.length > 5) {
+    feed.removeChild(feed.lastElementChild);
+  }
+}
+
+function simulateAnomaly() {
+  if (incidentActive) return;
+  incidentActive = true;
+
+  document.getElementById("success").textContent = "94.1%";
+  document.getElementById("latency").textContent = "520 ms";
+  document.getElementById("errors").textContent = "5.9%";
+  document.getElementById("tickets").textContent = "86";
+
+  document.getElementById("successFoot").textContent = "↓ Below target";
+  document.getElementById("latencyFoot").textContent = "↑ Elevated latency";
+  document.getElementById("errorFoot").textContent = "↑ Error spike detected";
+  document.getElementById("ticketFoot").textContent = "Illustrative incident spike";
+
+  document.getElementById("systemStatus").textContent = "● INCIDENT SIMULATED";
+  document.getElementById("systemStatus").style.color = "var(--red)";
+  document.getElementById("alertBox").style.display = "block";
+
+  document.getElementById("availabilityText").textContent = "94.1%";
+  document.getElementById("performanceText").textContent = "43%";
+  document.getElementById("healthText").textContent = "38%";
+
+  setBar("availabilityBar", 94.1);
+  setBar("performanceBar", 43);
+  setBar("healthBar", 38);
+
+  addActivity("⚠ Anomaly detected",
+    "Response time and error rate have increased in this simulation.",
+    "var(--red)");
+  addActivity("◈ Investigation recommended",
+    "Review application logs and verify the affected service.",
+    "var(--purple)");
+}
+
+function publishNotice() {
+  const notice = document.getElementById("noticeBox");
+  notice.style.display = "block";
+  notice.textContent = incidentActive
+    ? "Incident notice simulated. No real notification has been sent."
+    : "Maintenance/status notice simulated. No real notification has been sent.";
+
+  addActivity("✉ User notice prepared",
+    "A sample status message was generated for demonstration.",
+    "var(--cyan)");
+}
+
+function resolveIncident() {
+  incidentActive = false;
+
+  document.getElementById("success").textContent = "99.9%";
+  document.getElementById("latency").textContent = "165 ms";
+  document.getElementById("errors").textContent = "0.1%";
+  document.getElementById("tickets").textContent = "18";
+
+  document.getElementById("successFoot").textContent = "↑ Service recovered";
+  document.getElementById("latencyFoot").textContent = "Within target";
+  document.getElementById("errorFoot").textContent = "Normal range";
+  document.getElementById("ticketFoot").textContent = "Illustrative remaining tickets";
+
+  document.getElementById("systemStatus").textContent = "● SYSTEM RECOVERED";
+  document.getElementById("systemStatus").style.color = "var(--green)";
+  document.getElementById("alertBox").style.display = "none";
+
+  document.getElementById("availabilityText").textContent = "99.9%";
+  document.getElementById("performanceText").textContent = "96%";
+  document.getElementById("healthText").textContent = "99%";
+
+  setBar("availabilityBar", 99.9);
+  setBar("performanceBar", 96);
+  setBar("healthBar", 99);
+
+  addActivity("✓ Recovery simulated",
+    "The demo dashboard has returned to a healthy state.",
+    "var(--green)");
+}
+
+function resetDemo() {
+  document.getElementById("noticeBox").style.display = "none";
+  document.getElementById("alertBox").style.display = "none";
+  document.getElementById("activityFeed").innerHTML = `
+    <div class="activity">
+      <strong style="color:var(--green)">✓ Health check passed</strong>
+      <small>Application services are responding normally.</small>
+    </div>
+    <div class="activity">
+      <strong style="color:var(--cyan)">◈ Monitoring active</strong>
+      <small>Watching response time, availability, and error patterns.</small>
+    </div>
+    <div class="activity">
+      <strong style="color:var(--purple)">✦ Predictive analysis ready</strong>
+      <small>Demo is ready to simulate a potential incident.</small>
+    </div>`;
+  incidentActive = false;
+
+  document.getElementById("success").textContent = "99.8%";
+  document.getElementById("latency").textContent = "180 ms";
+  document.getElementById("errors").textContent = "0.2%";
+  document.getElementById("tickets").textContent = "12";
+
+  document.getElementById("successFoot").textContent = "↑ Healthy performance";
+  document.getElementById("latencyFoot").textContent = "Within target";
+  document.getElementById("errorFoot").textContent = "Normal range";
+  document.getElementById("ticketFoot").textContent = "Illustrative open tickets";
+
+  document.getElementById("systemStatus").textContent = "● ALL SYSTEMS OPERATIONAL";
+  document.getElementById("systemStatus").style.color = "var(--green)";
+
+  document.getElementById("availabilityText").textContent = "99.8%";
+  document.getElementById("performanceText").textContent = "92%";
+  document.getElementById("healthText").textContent = "98%";
+
+  setBar("availabilityBar", 99.8);
+  setBar("performanceBar", 92);
+  setBar("healthBar", 98);
+}
+
+resetDemo();
+</script>
+</body>
+</html>
